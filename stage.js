@@ -54,10 +54,10 @@ export default class Stage extends Scene {
                     this.level.restoreSteps();
                 }
             }),
-            Assets.loadRaw('./pai/mark.emf').then((data) => {
+            Assets.loadRaw('./drawable/pai/mark.emf').then((data) => {
                 mark = new Emf(data);
             }),
-            Assets.loadRaw('./pai/mask.emf').then((data) => {
+            Assets.loadRaw('./drawable/pai/mask.emf').then((data) => {
                 shadow = this.makeShadow(new Emf(data));
             }),
             Assets.loadRaw('./drawable/menu.emf').then((data) => {
