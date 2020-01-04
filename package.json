@@ -1,0 +1,13 @@
+{
+  "name": "msolitairejs",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "author": "",
+  "license": "MIT",
+  "homepage": "https://onihei.github.io/msolitairejs",
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
