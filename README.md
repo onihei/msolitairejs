@@ -16,9 +16,10 @@ ES6で書かれた麻雀ソリティアです。麻雀ソリティアは麻雀�
 ### 技術要素
 1. ES6
 2. Enhanced Metafile (EMF)
-3. Web Audio API
-4. Canvas
-5. バックトラッキング
+3. Canvas API
+4. Web Audio API
+5. Web Storage API
+6. バックトラッキング
 
 ### リソースの説明
 #### background
