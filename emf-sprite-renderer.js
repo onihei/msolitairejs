@@ -112,6 +112,9 @@ export default class EmfSpriteRenderer extends Renderer {
             case 35: // EMR_SETWORLDTRANSFORM
                 ctx2d.restore();
                 break;
+            case 81: // EMR_STRETCHDIBITS
+                ctx2d.drawImage(data.image, 0, -data.image.height);
+                break;
             default:
                 console.log(iType);
                 break;

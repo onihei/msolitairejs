@@ -303,7 +303,30 @@ export default class Emf {
                 // ignore
                 break;
             case 81: // EMR_STRETCHDIBITS
-                // ignore
+                recordIs.readInt(); // rclBounds
+                recordIs.readInt();
+                recordIs.readInt();
+                recordIs.readInt();
+
+                let xDest = recordIs.readInt();
+                let yDest = recordIs.readInt();
+                let xSrc = recordIs.readInt();
+                let ySrc = recordIs.readInt();
+                let cxSrc = recordIs.readInt();
+                let cySrc = recordIs.readInt();
+                let offBmiSrc = recordIs.readInt();
+                let cbBmiSrc = recordIs.readInt();
+                let offBitsSrc = recordIs.readInt();
+                let cbBitsSrc = recordIs.readInt();
+                let iUsageSrc = recordIs.readInt();
+                let dwRop = recordIs.readInt();
+                let cxDest = recordIs.readInt();
+                let cyDest = recordIs.readInt();
+
+                let image = this.createImage(recordIs);
+                this.emfOperations.push(new EmfOperation(iType, {
+                    image : image
+                }));
                 break;
             case 6: // EMR_POLYLINETO
                 // ignore
@@ -318,5 +341,51 @@ export default class Emf {
                 console.log(iType);
                 break;
         }
+    }
+
+    createImage(is) {
+        // BitmapInfoHeader
+        let size = is.readInt();
+        let width = is.readInt();
+        let height = is.readInt();
+        let planes = is.readUnsignedShort();
+        let bitCount = is.readUnsignedShort();
+        let compression = is.readInt();
+        let sizeImage = is.readInt();
+        let xpm = is.readInt();
+        let ypm = is.readInt();
+        let clrUsed = is.readInt();
+        let clrImportant = is.readInt();
+
+        let scanline = ((width * 3 + 3) & 0xFFFFFFFC);
+        let topdown = height < 0;
+
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+
+        let imageData = ctx.createImageData(width, height);
+        for (let i = height-1; i >= 0; i--) {
+            let l = i;
+            if (topdown) {
+                l = height - 1 - i;
+            }
+            for (let j = 0; j < width; j++) {
+                let b = is.readByte();
+                let g = is.readByte();
+                let r = is.readByte();
+                let pos = (l * width + j) * 4;
+                imageData.data[pos] = r;
+                imageData.data[pos+1] = g;
+                imageData.data[pos+2] = b;
+                imageData.data[pos+3] = 0xff;
+            }
+            for (let j = width * 3; j < scanline; j++) {
+                is.readByte();
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+        return canvas;
     }
 }
