@@ -26,10 +26,17 @@ ES6で書かれた麻雀ソリティアです。麻雀ソリティアは麻雀�
 自分のアルバムから持ってきた写真をPhotoshopで縮小しました。
 
 #### drawable
-Illustratorで出力した [Enhanced Metafile (EMF)](https://docs.microsoft.com/ja-jp/openspecs/windows_protocols/ms-emf/)です。EMFは軽量でフォーマットが公開されているベクター画像です。ベジェ曲線も扱えます。Javascriptでベクター画像を再生するのにちょうどよいので採用しました。
+Illustratorで出力した [Enhanced Metafile (EMF)](https://docs.microsoft.com/ja-jp/openspecs/windows_protocols/ms-emf/)です。EMFは軽量でフォーマットが公開されている画像フォーマットです。ベジェ曲線も扱えます。Javascriptでベクター画像を再生するのにちょうどよいので採用しました。
+
+EMF は Windowsのグラフィックスコンテキストへの操作をそのまま記録したようなフォーマットです。そのためベジェ曲線以外の機能を持っていますが、作成したパーサは必要な機能しかデコードしていません。
+
+EMF はグラデーションの塗り潰しができません。グラデーションを使用したイラストを Illustrator で EMF に出力できますが、その部分はビットマップ画像になるので注意が必要です。
+
+ベクター画像の作成には Illustrator と sketch を使用しました。
 
 #### level
 [Platinum](https://www.vector.co.jp/soft/win95/game/se231004.html)で出力したFMFファイルです。牌の配列をこれで作成しました。5つのレイヤーがあり、同じ位置の牌が重なるようにしました。
+このファイルに記録しているのは配置場所だけです。実際に配置する麻雀牌は実行時に決定します。
 
 #### sound
 パブリックドメインのmidiをガレージバンドで変換しました。
