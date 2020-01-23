@@ -3,8 +3,7 @@ Mahjong Solitaire with native Javascript ES6
 
 ES6で書かれた麻雀ソリティアです。麻雀ソリティアは麻雀牌のペアを取り除くシンプルなゲームです。
 
-![画面](./ss.jpg)
-
+<img src="./ss.jpg" width="600px" alt="画面">
 
 ## 遊ぶ
 [https://onihei.github.io/msolitairejs](https://onihei.github.io/msolitairejs)
