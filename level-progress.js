@@ -1,16 +1,14 @@
 import Scene from './scene.js'
 import Assets from './assets.js'
 import RoundRect from './round-rect.js'
-import Engine from './engine.js'
 import Stage from './stage.js'
-import Audio from "./audio.js";
 import Label from "./label.js";
 import Repository from "./repository.js";
 
 export default class LevelProgress extends Scene {
 
-    constructor() {
-        super();
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
         this.currentLevel = Repository.getCurrentLevel();
         this.initStages();
     }
@@ -70,9 +68,9 @@ export default class LevelProgress extends Scene {
 
     handleClick(event) {
         super.handleClick(event);
-        Engine.addScene('stage', new Stage(this.currentLevel))
+        this.engine.addScene('stage', new Stage(this.engine, this.audio, this.currentLevel))
             .then(() => {
-                Engine.setCurrentSceneName('stage');
+                this.engine.setCurrentSceneName('stage');
             })
             .catch(reason => {
                 console.log(reason);
@@ -81,6 +79,6 @@ export default class LevelProgress extends Scene {
 
     onEnter() {
         super.onEnter();
-        Audio.stop();
+        this.audio.stop();
     }
 }

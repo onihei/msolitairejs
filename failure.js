@@ -2,15 +2,13 @@ import Scene from './scene.js'
 import Assets from './assets.js'
 import Emf from './emf.js'
 import EmfSprite from './emf-sprite.js'
-import Engine from './engine.js'
-import Audio from "./audio.js"
 import Repository from "./repository.js";
 import Stage from "./stage.js";
 
 export default class Failure extends Scene {
 
-    constructor(props) {
-        super(props);
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
     }
 
     async init() {
@@ -22,7 +20,7 @@ export default class Failure extends Scene {
                 }, 3000);
             }),
             Assets.loadAudio('./sound/failure.m4a').then((data) => {
-                Audio.load('failure', data);
+                this.audio.load('failure', data);
             }),
             Assets.loadRaw('./drawable/failure.emf').then((data) => {
                 let emf = new EmfSprite(new Emf(data), this.width, this.height, true);
@@ -56,20 +54,20 @@ export default class Failure extends Scene {
 
     onEnter() {
         super.onEnter();
-        Audio.stop();
-        Audio.play('failure', true);
+        this.audio.stop();
+        this.audio.play('failure', true);
     }
 
     doRetry() {
-        let level = Repository.getCurrentLevel();
-        Engine.addScene('stage', new Stage(level))
+        const level = Repository.getCurrentLevel();
+        this.engine.addScene('stage', new Stage(this.engine, this.audio, level))
             .then(() => {
-                Engine.setCurrentSceneName('stage');
+                this.engine.setCurrentSceneName('stage');
             });
     }
 
     doRetire() {
-        Audio.stop();
-        Engine.setCurrentSceneName('title');
+        this.audio.stop();
+        this.engine.setCurrentSceneName('title');
     }
 }
