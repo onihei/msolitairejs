@@ -1,7 +1,5 @@
 import Scene from './scene.js'
 import Assets from './assets.js'
-import Engine from './engine.js'
-import Audio from "./audio.js"
 import Color from "./color.js";
 import EmfSprite from "./emf-sprite.js";
 import Emf from "./emf.js";
@@ -13,8 +11,8 @@ let textCanvasCtx;
 
 export default class Ending extends Scene {
 
-    constructor(props) {
-        super(props);
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
     }
 
     async init() {
@@ -27,7 +25,7 @@ export default class Ending extends Scene {
                 }, 5000);
             }),
             Assets.loadAudio('./sound/ending.m4a').then((data) => {
-                Audio.load('ending', data);
+                this.audio.load('ending', data);
             }),
             Assets.loadRaw('./drawable/buta.emf').then((data) => {
                 let emf = new EmfSprite(new Emf(data), this.width, this.height, true);
@@ -70,7 +68,7 @@ export default class Ending extends Scene {
         if (this.frame === 3000) {
             this.buta.visible = true;
         }
-        Engine.render();
+        this.engine.invalidate();
         this.requestId = requestAnimationFrame(this.mainLoop.bind(this));
         this.frame++;
     }
@@ -92,8 +90,8 @@ export default class Ending extends Scene {
     onEnter() {
         super.onEnter();
         this.initTextCanvas();
-        Audio.stop();
-        Audio.play('ending', true);
+        this.audio.stop();
+        this.audio.play('ending', true);
         this.requestId = requestAnimationFrame(this.mainLoop.bind(this));
     }
 

@@ -8,16 +8,21 @@ import RoundRectRenderer from "./round-rect-renderer.js";
 import LabelRenderer from "./label-renderer.js";
 import SpriteRenderer from "./sprite-renderer.js";
 
-Audio.init();
-Engine.init(800,480, 2);
-Engine.addRenderer(new SceneRenderer());
-Engine.addRenderer(new PaiRenderer());
-Engine.addRenderer(new EmfSpriteRenderer());
-Engine.addRenderer(new RoundRectRenderer());
-Engine.addRenderer(new LabelRenderer());
-Engine.addRenderer(new SpriteRenderer());
+// 依存性注入パターンで初期化
+const audio = new Audio();
+const engine = new Engine(800, 480, 2);
 
-Engine.addScene('title', new Title())
+// レンダラーの追加
+engine.addRenderer(new SceneRenderer());
+engine.addRenderer(new PaiRenderer());
+engine.addRenderer(new EmfSpriteRenderer());
+engine.addRenderer(new RoundRectRenderer());
+engine.addRenderer(new LabelRenderer());
+engine.addRenderer(new SpriteRenderer());
+
+// タイトルシーンの追加（エンジンとオーディオを注入）
+engine.addScene('title', new Title(engine, audio))
     .then(() => {
-        Engine.setCurrentSceneName('title');
+        engine.setCurrentSceneName('title');
+        engine.startGameLoop();
     });

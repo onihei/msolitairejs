@@ -325,12 +325,12 @@ export default class Stage extends Scene {
         Repository.setCurrentLevel(this.levelNumber);
         this.children.filter(view => view instanceof Pai).forEach(v=>this.removeChild(v));
 
-        let levelConfig = new LevelConfig(this.levelNumber);
+        const levelConfig = new LevelConfig(this.levelNumber);
         Assets.loadRaw(levelConfig.fmfUrl).then((data) => {
             this.level = new Level(data, levelConfig.seed);
             this.level.paiSet.loadEmf().then(() => {
                 this.arrangePais();
-                Engine.render();
+                this.engine.invalidate();
             });
         });
     }

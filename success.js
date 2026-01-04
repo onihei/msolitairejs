@@ -2,14 +2,12 @@ import Scene from './scene.js'
 import Assets from './assets.js'
 import Emf from './emf.js'
 import EmfSprite from './emf-sprite.js'
-import Engine from './engine.js'
-import Audio from "./audio.js"
 import LevelProgress from "./level-progress.js"
 
 export default class Success extends Scene {
 
-    constructor() {
-        super();
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
     }
 
     async init() {
@@ -21,7 +19,7 @@ export default class Success extends Scene {
                 }, 2000);
             }),
             Assets.loadAudio('./sound/success.m4a').then((data) => {
-                Audio.load('success', data);
+                this.audio.load('success', data);
             }),
             Assets.loadRaw('./drawable/success.emf').then((data) => {
                 let emf = new EmfSprite(new Emf(data), this.width, this.height, true);
@@ -44,15 +42,15 @@ export default class Success extends Scene {
     }
 
     goNext() {
-        Engine.addScene('levelProgress', new LevelProgress())
+        this.engine.addScene('levelProgress', new LevelProgress(this.engine, this.audio))
             .then(() => {
-                Engine.setCurrentSceneName('levelProgress');
+                this.engine.setCurrentSceneName('levelProgress');
             });
     }
 
     onEnter() {
         super.onEnter();
-        Audio.stop();
-        Audio.play('success', true);
+        this.audio.stop();
+        this.audio.play('success', true);
     }
 }

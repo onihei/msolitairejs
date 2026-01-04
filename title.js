@@ -2,17 +2,15 @@ import Scene from './scene.js'
 import Assets from './assets.js'
 import Emf from './emf.js'
 import EmfSprite from './emf-sprite.js'
-import Engine from './engine.js'
 import Stage from './stage.js'
-import Audio from "./audio.js";
 import LevelProgress from "./level-progress.js";
 import Repository from "./repository.js";
 import LevelSelect from "./level-select.js";
 
 export default class Title extends Scene {
 
-    constructor(props) {
-        super(props);
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
     }
 
     async init() {
@@ -62,13 +60,13 @@ export default class Title extends Scene {
                 emf.left = 700;
                 emf.top = 20;
                 emf.order = 2;
-                emf.visible = !Audio.isMute();
+                emf.visible = !this.audio.isMute();
                 emf.setOnClickListener(()=>{
-                    Audio.setMute(true);
+                    this.audio.setMute(true);
                     setTimeout(()=>{
                         this.soundOn.visible = false;
                         this.soundMute.visible = true;
-                        Engine.render();
+                        this.engine.invalidate();
                     }, 0);
                 });
                 this.addChild(emf);
@@ -79,13 +77,13 @@ export default class Title extends Scene {
                 emf.left = 700;
                 emf.top = 20;
                 emf.order = 2;
-                emf.visible = Audio.isMute();
+                emf.visible = this.audio.isMute();
                 emf.setOnClickListener(()=>{
-                    Audio.setMute(false);
+                    this.audio.setMute(false);
                     setTimeout(()=>{
                         this.soundOn.visible = true;
                         this.soundMute.visible = false;
-                        Engine.render();
+                        this.engine.invalidate();
                     }, 0);
                 });
                 this.addChild(emf);
@@ -96,27 +94,27 @@ export default class Title extends Scene {
 
     doStart() {
         Repository.setCurrentLevel(0);
-        Audio.resume();
-        Engine.addScene('levelProgress', new LevelProgress())
+        this.audio.resume();
+        this.engine.addScene('levelProgress', new LevelProgress(this.engine, this.audio))
             .then(() => {
-                Engine.setCurrentSceneName('levelProgress');
+                this.engine.setCurrentSceneName('levelProgress');
             });
     }
 
     doResume() {
-        let level = Repository.getCurrentLevel();
-        Audio.resume();
-        Engine.addScene('stage', new Stage(level, true))
+        const level = Repository.getCurrentLevel();
+        this.audio.resume();
+        this.engine.addScene('stage', new Stage(this.engine, this.audio, level, true))
             .then(() => {
-                Engine.setCurrentSceneName('stage');
+                this.engine.setCurrentSceneName('stage');
             });
     }
 
     doLevelSelect() {
-        Audio.resume();
-        Engine.addScene('levelSelect', new LevelSelect())
+        this.audio.resume();
+        this.engine.addScene('levelSelect', new LevelSelect(this.engine, this.audio))
             .then(() => {
-                Engine.setCurrentSceneName('levelSelect');
+                this.engine.setCurrentSceneName('levelSelect');
             });
     }
 }

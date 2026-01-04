@@ -1,16 +1,14 @@
 import Scene from './scene.js'
 import Assets from './assets.js'
 import RoundRect from './round-rect.js'
-import Engine from './engine.js'
 import Stage from './stage.js'
-import Audio from "./audio.js";
 import Label from "./label.js";
 import Repository from "./repository.js";
 
 export default class LevelSelect extends Scene {
 
-    constructor() {
-        super();
+    constructor(engine, audio, props = {}) {
+        super(engine, audio, props);
         this.reachedLevelNumber = Repository.getReachedLevel();
         this.initStages();
     }
@@ -72,14 +70,14 @@ export default class LevelSelect extends Scene {
 
     selectLevel(level) {
         Repository.setCurrentLevel(level);
-        Engine.addScene('stage', new Stage(level))
+        this.engine.addScene('stage', new Stage(this.engine, this.audio, level))
             .then(() => {
-                Engine.setCurrentSceneName('stage');
+                this.engine.setCurrentSceneName('stage');
             });
     }
 
     onEnter() {
         super.onEnter();
-        Audio.stop();
+        this.audio.stop();
     }
 }
